@@ -1,0 +1,31 @@
+[core]
+@memory  inventory:number[]
+#o位弃用 
+@memory  inventoryIDX:number[]
+#
+@global capacity = 10
+
+[hiddenAction_updt]
+[action_slot0]
+@define idx = 0
+isVisible:if memory.inventoryIDX[${idx}] != 0 and memory.inventory[memory.inventoryIDX[${idx}]] != 0
+displayType:infoOnly
+buildSpeed:0
+text:%{memory.inventory[memory.inventoryIDX[${idx}]]}
+textPostFix:0
+iconImage:ROOT:texture/other/none.png
+[action_slot1]
+@copyFromSection:action_slot0
+@define idx = 1
+textPostFix:test
+iconImage:ROOT:texture/other/none.png
+[action_slot2]
+@copyFromSection:action_slot0
+@define idx = 2
+textPostFix:原木
+iconImage:ROOT:texture/resource/beam/log.png
+[action_slot3]
+@copyFromSection:action_slot0
+@define idx = 3
+textPostFix:木板
+iconImage:ROOT:texture/resource/plate/woodenPlate.png
