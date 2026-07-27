@@ -1,0 +1,19 @@
+以下是本模组使用的bgm来源
+如有侵权 请联系删除
+STARBLAST: https:/starblast.io
+argon
+crystal
+procedurality
+warp_drive
+civilisation
+red_mist
+starblast_trailer
+GalacticraftTeam:
+gravity v5
+farlands v5
+spacerace v5
+orbit v4
+mimas v4
+mars v4
+Mindustry by Anuken:
+game9

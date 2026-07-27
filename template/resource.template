@@ -81,6 +81,7 @@ displayName:钛锭
 displayColor: #ffffff
 #id:10,type:1
 [resource_titaniumRope]
+#should be wire
 displayName:钛线
 displayColor: #ffffff
 #id:11,type:3

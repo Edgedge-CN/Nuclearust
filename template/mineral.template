@@ -1,4 +1,4 @@
-[resource_ferronickel]
+[resource_mineFerronickel]
 displayName:铁镍矿
 #炼钢原料 Iron75% Nickel25%
 [resource_galena]
