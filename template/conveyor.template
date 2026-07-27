@@ -1,0 +1,30 @@
+[core]
+@memory dir:number
+@memory speedR:float
+@memory sx:number
+@memory sy:number
+@global speed=1
+tags:conveyor
+autoTriggerCheckRate:every8Frames
+[hiddenAction_init]
+autoTriggerOnEvent:created
+setUnitMemory:speedR=${speed}/10
+[decal_main]
+#layer:beforeBody
+basePosition:getOffsetRelative(dirOffset=memory.dir*90)
+image:ROOT:texture/machine/item/woodenConveyor0.png
+total_frames:4
+frame:int(self.customTimer*${speed}%4)
+#self.timeAlive
+imageScale:0.625
+#alwaysStartDirAtZero:true
+[action_right]
+buildSpeed:0
+text:右转
+iconImage:ROOT:texture/UI/icon/right96.png
+setUnitMemory:dir=select(memory.dir>=3,0,memory.dir+1),sx=select((memory.dir)%2!=0,select(memory.dir==1,-1,1)*memory.speedR,0),sy=select((memory.dir+1)%2!=0,select(memory.dir==0,-1,1)*memory.speedR,0)
+[action_left]
+buildSpeed:0
+text:左转
+iconImage:ROOT:texture/UI/icon/left96.png
+setUnitMemory:dir=select(memory.dir<=0,3,memory.dir-1),sx=select((memory.dir)%2!=0,select(memory.dir==1,-1,1)*memory.speedR,0),sy=select((memory.dir+1)%2!=0,select(memory.dir==0,-1,1)*memory.speedR,0)

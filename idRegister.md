@@ -8,7 +8,7 @@
 -s  stick      72
 -b  beam   144
 -P   POWDER  144
--B  BLOCK      1440
+-B  BLOCK      1296
 # iron:
 -w
 -p
