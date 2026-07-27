@@ -1,0 +1,12 @@
+[resource_stainlessSteel]
+displayName:不锈钢锭
+[resource_steel]
+displayName:钢锭
+
+
+[resource_AlSiay]
+displayName:铝合金锭
+#10% Si   加入CuFeNi 提高产量    矿电解:Al2O3 SiO2熔电解
+[resource_magTungsten]
+displayName:磁化钨锭
+#10%Sa

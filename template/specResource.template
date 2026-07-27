@@ -1,0 +1,9 @@
+[resource_DU]
+displayName:贫铀锭
+#depleted uranium
+#235U 1%
+[resource_nU]
+displayName:天然铀锭
+[resource_NU]
+displayName:未浓缩铀锭
+

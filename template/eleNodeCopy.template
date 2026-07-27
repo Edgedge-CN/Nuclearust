@@ -3,7 +3,7 @@
 @global maxConnect=3
 @global connectRange=100
 @global colorBase=#b25050
-@global colorUpper=#ffcccc
+@global colorUpper=#ffffff
 @global connectRequireTag=ele_node
 @global autoConnectOnCreated=true
 @global connectCondtional:bool=true == true
@@ -13,10 +13,13 @@ tags:${connectRequireTag}
 
 @memory passiveConnection:unit[]
 @memory connection:unit[]
+@memory queueConnection:unit[]
 @memory root:unit
+@memory nil:unit
 @memory last:number
 @memory process:bool
 @memory init:bool
+@memory idx:number
 autoTriggerCheckRate:every8Frames
 maxTransportingUnits:1
 
@@ -57,32 +60,54 @@ displayName:状态
 autoTriggerOnEvent:created
 setUnitMemory:init=true
 [hiddenAction_init]
-autoTriggerOnEvent:created
+	setUnitMemory:init=select(memory.idx>=${maxConnect},false,true),idx=memory.idx+1
 debugMessage:Node%{self.id} init
+autoTrigger:if memory.init ==true and self.resource.state==0
 takeResources:0
 takeResources_maxUnits:1
 #${maxConnect}
 takeResources_excludeUnitsWithTheseResources:state=1
 takeResources_excludeUnitsWithoutTags:${connectRequireTag}
 takeResources_searchOnly:true
+#takeResources_triggerActionIfNoneCollected:createRoot
+takeResources_triggerActionForEach:connectInit
+takeResources_includeUnitsWithinRange:${connectRange}
+[hiddenAction_creator]
+autoTriggerOnEvent:created
+takeResources:0
+takeResources_maxUnits:16
+takeResources_excludeUnitsWithTheseResources:state=1
+takeResources_excludeUnitsWithoutTags:${connectRequireTag}
+takeResources_searchOnly:true
 takeResources_triggerActionIfNoneCollected:createRoot
-takeResources_triggerActionForEach:connectRequest
 takeResources_includeUnitsWithinRange:${connectRange}
 [hiddenAction_connectInit]
-text:placeholder
+setUnitMemory:queueConnection[memory.queueConnection.size]=thisActionTarget
 [hiddenAction_connectRequest]
 buildSpeed:0
 debugMessage:%{self.id}sendReqTo%{thisActionTarget.id}
 #连接先发请求 确保条件均满足
-shrinkArrays:passiveConnection
+shrinkArrays:queueConnection
 requireConditional:if not (memory.connection.contains(thisActionTarget) and thisActionTarget.readUnitMemory('root',type='unit')!=memory.root)
 sendMessageTo:select(thisActionTarget==null,customTarget2,thisActionTarget)
+setUnitMemory:process=true,queueConnection[memory.queueConnection.size]=select(memory.process,select(thisActionTarget==null,customTarget2,thisActionTarget),null)
+sendMessageWithTags:connectRequest
+[hiddenAction_connectRequestQueue]
+autoTrigger:if memory.queueConnection.size>0 and memory.process==false
+#requireConditional:if not (memory.connection.contains(memory.queueConnection[memory.queueConnection.size]) and memory.queueConnection[memory.queueConnection.size].readUnitMemory('root',type='unit')!=memory.root)
+buildSpeed:0
+debugMessage:%{self.id}po%{memory.queueConnection[memory.queueConnection.size]}
+#连接先发请求 确保条件均满足
+shrinkArrays:queueConnection
+#requireConditional:self.
+sendMessageTo:select(self.resource.state==0 and (memory.connection.contains(memory.queueConnection[memory.queueConnection.size]) and memory.queueConnection[memory.queueConnection.size].readUnitMemory('root',type='unit')!=memory.root),null,memory.queueConnection[memory.queueConnection.size])
+setUnitMemory:process=select(not (memory.connection.contains(memory.queueConnection[memory.queueConnection.size]) and memory.queueConnection[memory.queueConnection.size].readUnitMemory('root',type='unit')!=memory.root),true,false),queueConnection[memory.queueConnection.size]=null
 sendMessageWithTags:connectRequest
 [hiddenAction_connectRequestAccess]
 buildSpeed:0.1s
 #我是不是记错词了
 autoTriggerOnEvent:newMessage(withTag='connectRequest')
-requireConditional:if (not memory.connection.contains(eventSource)) and (not memory.passiveConnection.contains(eventSource))
+requireConditional:if not memory.connection.contains(eventSource) and not memory.passiveConnection.contains(eventSource)
 #${connectCondtional} and
 debugMessage:%{self.id}Allowed%{eventSource.id}
 #多此亿举
@@ -91,17 +116,12 @@ setUnitMemory=passiveConnection[memory.passiveConnection.size]=eventSource
 sendMessageTo:self
 sendMessageWithTags:reg0
 #requestAccept
-sendMessageWithData:target=eventSource
+sendMessageWithData:target=eventSource,alt=true
 [hiddenAction_reg]
 buildSpeed:0
 autoTriggerOnEvent:newMessage(withTag='reg0')
 sendMessageTo:eventData('target',type='unit')
 sendMessageWithTags:requestAccept
-[hiddenAction_serReg]
-buildSpeed:0
-autoTriggerOnEvent:newMessage(withTag='serReg')
-setUnitMemory=connection[memory.connection.size]=eventSource
-alsoQueueAction: update
 [hiddenAction_update]
 buildSpeed:0
 # highProp
@@ -111,7 +131,7 @@ setResourcesWithLogic:state=select(memory.connection.size+memory.passiveConnecti
 buildSpeed:0
 autoTriggerOnEvent:newMessage(withTag='requestAccept')
 requireConditional:if eventSource != self
-setUnitMemory=connection[memory.connection.size]=eventSource,root=eventSource.readUnitMemory('root',type='unit')
+setUnitMemory=connection[memory.connection.size]=eventSource,root=eventSource.readUnitMemory('root',type='unit'),process=false
 alsoQueueAction: update,registerToRoot
 sendMessageTo:self
 #sendMessageWithTags:reg0
@@ -119,7 +139,7 @@ sendMessageTo:self
 
 [hiddenAction_createRoot]
 buildSpeed:0
-addUnitsIntoTransport:powerGrid*1
+addUnitsIntoTransport:ewebRoot*1
 fireTurretXAtGround: select
 fireTurretXAtGround_withOffset:0,0
 setUnitMemory:root=transporting(slot=0)
@@ -151,53 +171,6 @@ color: ${colorBase}
 drawLineTo:memory.connection[(${idx})].attachment
 #@copyFromSection:decal_l0
 #drawLineTo:memory.source.attachment
-[decal_g0]
-@define idx=0
-layer: BEFOREUI
-lineWidth:2
-#yOffsetRelative:
-alpha:memory.root.readUnitMemory('alpha',type='float')
-#memory.root.readUnitMemory('powerGen',type='float')/memory.root.readUnitMemory('powerCost',type='float')
-color: ${colorUpper}
-drawLineTo:memory.connection[(${idx})].attachment
-#@copyFromSection:decal_l0
-#drawLineTo:memory.source.attachment
-[decal_g1]
-@copyFromSection:decal_g0
-@define idx=1
-[decal_g2]
-@copyFromSection:decal_g0
-@define idx=2
-[decal_g3]
-@copyFromSection:decal_g0
-@define idx=3
-[decal_g4]
-@copyFromSection:decal_g0
-@define idx=4
-[decal_g5]
-@copyFromSection:decal_g0
-@define idx=5
-[decal_g6]
-@copyFromSection:decal_g0
-@define idx=6
-[decal_g7]
-@copyFromSection:decal_g0
-@define idx=7
-[decal_g8]
-@copyFromSection:decal_g0
-@define idx=8
-[decal_g9]
-@copyFromSection:decal_g0
-@define idx=9
-[decal_g10]
-@copyFromSection:decal_g0
-@define idx=10
-[decal_g11]
-@copyFromSection:decal_g0
-@define idx=11
-[decal_g12]
-@copyFromSection:decal_g0
-@define idx=12
 [decal_l1]
 @copyFromSection:decal_l0
 @define idx = 1

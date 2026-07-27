@@ -1,0 +1,57 @@
+[core]
+#Made By Edgedge 1214759665@qq.com 过来找我赤更多大粪ini
+@memory index:number
+#有没有int有没有int有没有int
+@memory root:unit
+@global capacity = 0
+@global autoConnectRange = 200
+@memory storaged:float
+@global offsetX = 0
+@global offsetY = 0
+@memory power:float
+@memory lastUpload:float
+tags:ser,power
+autoTriggerCooldownTime:0.5s
+[resource_state]
+hidden:true
+[attack]
+canAttack:false
+maxAttackRange:${autoConnectRange}
+[hiddenAction_init]
+autoTriggerOnEvent:created
+takeResources:0
+takeResources_maxUnits:1
+#${maxConnect}
+takeResources_excludeUnitsWithTheseResources:state=1
+takeResources_excludeUnitsWithoutTags:ele_node
+takeResources_searchOnly:true
+#takeResources_triggerActionIfNoneCollected:
+takeResources_triggerActionForEach:reg
+takeResources_includeUnitsWithinRange:${autoConnectRange}
+[hiddenAction_reg]
+buildSpeed:0
+sendMessageTo:thisActionTarget
+sendMessageWithTags:serReg
+setUnitMemory:root=thisActionTarget.readUnitMemory('root',type='unit')
+[hiddenAction_update]
+buildSpeed:0
+autoTrigger:if memory.lastUpload != memory.power
+sendMessageTo:memory.root
+sendMessageWithTags:updatePower
+sendMessageWithData:powerDelta=memory.power-memory.lastUpload
+#电网是powerGrid还是powerWeb来着
+alsoQueueAction:post
+[hiddenAction_post]
+buildSpeed:0s
+setUnitMemory:lastUpload=memory.power
+[attachment_eport]
+x:0
+y:3
+isUnselectable:true
+canBeAttackedAndDamaged:false
+addTransportedUnits:false
+setDrawLayerOnBottom:false
+canAttack:false
+lockRotation:true
+idleDir:0
+onCreateSpawnUnitOf:ePort

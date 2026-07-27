@@ -1,0 +1,29 @@
+[resource_ferronickel]
+displayName:铁镍矿
+#炼钢原料 Iron75% Nickel25%
+[resource_galena]
+displayName:方铅矿
+#PbS 氧气+加热分离SO2
+[resource_mineThorium]
+displayName:二氧化钍
+[resource_mineUranium]
+displayName:八氧化三铀
+[resource_fluorite]
+displayName:荧石
+#CaF2 助熔剂 +硫酸=>HF
+[resource_quartz]
+displayName:石英矿
+#主要成分SiO2 压电性 作太阳能板和频率参考
+[resource_mica]
+displayName:云母
+#未启用 太尼玛复杂了
+[resource_rawSilicon]
+displayName:原生硅
+[resource_mineSchrabidium]
+displayName:天然Sa矿
+[resource_mineESchrabidium]
+displayName:富集Sa矿
+#致敬传奇bobcat
+[resource_mineTungsten]
+displayName:钨矿
+#WO3 碳还原

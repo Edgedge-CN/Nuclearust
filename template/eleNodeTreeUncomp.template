@@ -1,0 +1,248 @@
+[core]
+#已经停止维护 功能不可用 不信自己复制去试一下 一堆Bug
+#luke我巢倪抹
+
+
+
+
+#Made By Edgedge 1214759665@qq.com 过来找我赤更多大粪ini
+@memory source:unit
+#自己通过连接谁连接到了一个网络
+@memory root:unit
+#网络数据寄存对象
+@memory child:unit[]
+#谁(节点)连接到了自己
+@memory connectServices:unit[]
+#连接设备
+@memory queueNodes:unit[]
+#待连节点(显示但是没有实际建立连接)
+@memory connectable:bool
+#哦不我的塑料英语 所以到底有没有connectable 感觉没有() 算了反正老子写的老子来命名
+@memory index:number
+#有没有int有没有int有没有int
+@memory rootNew:unit
+@global maxRange = 200
+@global maxConnection = 4
+@global lineColor = #aa5050
+@global lineColorWapper = #ffd380
+@global offsetX = 0
+@global offsetY = 0
+#ARGB 不想要哪条线 就在对应在颜色前加00就行
+#conditional can be dynamic
+tags:node,power
+transportUnitsRequireTag:probe
+maxTransportingUnits:1
+transportUnitsAddUnloadOption: false
+autoTriggerCooldownTime:0.1s
+[turret_select]
+x:0
+y:0
+canShoot:false
+projectile:probe
+turnSpeed:64
+[projectile_probe]
+life:60
+explodeEffect:NONE
+drawSize:0
+directDamage:0
+speed:25
+targetGround:true
+unloadUpToXUnitsFromSource:1
+#instant:true
+[resource_totalGenerated]
+displayName:总发电量
+[resource_totalCost]
+displayName:总耗电量
+[resource_totalStoraged]
+displayName:总储存电量
+[resource_storageMax]
+displayName:最大存储电量
+[attack]
+canAttack:false
+maxAttackRange:${maxRange}
+[hiddenAction_init]
+autoTriggerOnEvent:created
+#takeResources_includeReference:
+setUnitMemory:source=nearestUnit(withinRange=${maxRange},withTag='node')
+alsoTriggerAction:newWeb,connectToWeb
+debugMessage:%{self.id} initStarted,source=%{memory.source.id}
+[hiddenAction_newWeb]
+requireConditional:if memory.source==null
+#spawnUnits:webStorage
+addUnitsIntoTransport:webStorage
+setUnitMemory:root=transporting(slot=0),source=self
+alsoTriggerAction:register
+fireTurretXAtGround:select
+fireTurretXAtGround_withOffset:0,0
+debugMessage:A new web created on%{self.id}
+[hiddenAction_connectToWeb]
+#也许叫system更好一点
+requireConditional:if memory.source!=null and memory.source!=self
+#应该用达摩根()
+setUnitMemory:root=memory.source.readUnitMemory('root',type='unit')
+sendMessageTo:memory.source
+sendMessageWithTags:requestChi
+#alsoTriggerAction:appendChild 错误的
+alsoTriggerAction:updateState,register
+debugMessage:%{self.id}connect web(rootId)%{memory.root.id}
+[hiddenAction_appendChild]
+autoTriggerOnEvent:newMessage(withTag='requestChi')
+shrinkArrays:child,connectServices,queueNodes
+setUnitMemory:child[memory.child.size]=eventSource
+alsoTriggerAction:updateState
+debugMessage:%{self.id}append%{eventSource.id}as%{memory.child.size}
+#用alsoTrigger统一更新偷个懒
+[hiddenAction_register]
+sendMessageTo:memory.root
+sendMessageWithTags:registerRequest
+#此节可简化
+debugMessage:%{self.id}registerReq to %{memory.root.id}
+[hiddenAction_updateState]
+highPriorityQueue:true
+#卧槽我都写state了还用connect-able
+setUnitMemory:connectable=(memory.queueNodes.size+memory.child.size+memory.connectServices.size+select(memory.source == null,0,1))<${maxConnection}
+shrinkArrays:child,connectServices,queueNodes
+#debugMessage:%{self.id}Updated,%{memory.connectable}
+[hiddenAction_queueNew(function)]
+#q(type,target)
+debugMessage:queueNewOn%{self.id},target%{eventSource.id}
+autoTriggerOnEvent:newMessage(withTag='connectRequest')
+requireConditional:if eventSource==self and memory.connectable
+setUnitMemory:"""queueNodes[memory.queueNodes.size]=select(eventData('node',type='unit')==null,memory.queueNodes[memory.queueNodes.size],eventData('node',type='unit')),
+connectServices[memory.connectServices.size]=select(eventData('ser',type='unit')==null,memory.connectServices[memory.connectServices.size],eventData('ser',type='unit'))
+"""
+alsoTriggerAction:reunionWebTrigger
+[hiddenAction_disconnectWeb]
+#断连重组
+autoTrigger:if memory.source == null
+spawnUnits:webStorage
+setUnitMemory:source=self,root=nearestUnit(withinRange=20,withTag='elesto'),index=0
+alsoTriggerAction:updateState,reflushRoot,reunionProcess2
+[hiddenAction_reflushRoot]
+debugMessage:reflushMainOn%{self.id}
+autoTriggerOnEventRecursionLimit:32
+sendMessageTo:memory.child[memory.index]
+sendMessageWithTags:reflushSource
+alsoTriggerAction:reflushRoot
+setUnitMemory:index=select(memory.index==memory.child.size,-1,memory.index+1)
+requireConditional:if memory.index!=-1
+#循环石山
+[hiddenAction_reflushRoot0]
+debugMessage:reflushRetOn%{self.id}
+autoTriggerOnEvent:newMessage(withTag='reflushSourse')
+alsoTriggerAction:updateState,connectToWeb
+#其实这里完全没有必要 这里单独立一节只是为了让逻辑清晰一点 避免写晕
+[hiddenAction_reunionWebTrigger]
+#神秘洋屁reunion
+requireConditional:if memory.queueNodes[memory.queueNodes.size].readUnitMemory('root',type='unit') != memory.root
+alsoTriggerAction:reunionPrepare,updateState
+[hiddenAction_reunionPrepare]
+debugMessage:prepareRUOn%{self.id}
+sendMessageTo:memory.root
+sendMessageWithData:new=memory.queueNodes[memory.queueNodes.size].readUnitMemory('root',type='unit')
+sendMessageWithTags:reunion
+[hiddenAction_reunionContru]
+debugMessage:reunionCOn%{self.id}
+autoTriggerOnEvent:newMessage(withTag='reunionC')
+setUnitMemory:rootNew=eventData('ntarget',type='unit')
+[hiddenAction_reunionProcess]
+setUnitMemory:source=select(memory.rootNew==memory.root,memory.source,memory.queueNodes[memory.queueNodes.size])
+alsoTriggerAction:reflushRoot
+[hiddenAction_reunionProcess2]
+setUnitMemory:source=select(memory.rootNew==memory.root,memory.source,memory.child[memory.child.size]),index=0
+alsoQueueAction:updateState,connectToWeb,reflushRoot,fkluke
+[hiddenAction_fkluke]
+setUnitMemory:queueNodes=null
+requireConditional:if memory.rootNew==memory.root
+[action_selectCon]
+debugMessage:fireOn%{self.id}
+addUnitsIntoTransport:probe*1
+text:选择连接对象
+fireTurretXAtGround: select
+fireTurretXAtGround_showGuideDecals:target
+description:蛋蛋蛋
+displayType: action
+buildSpeed: 0s
+pos: 0
+highPriorityQueue: true
+onlyOneUnitAtATime:false
+#isAlsoViewableByEnemies: true
+iconImage: SHARED:icon_attack_point.png
+setCustomTarget2:transporting(slot=0)
+[decal_target]
+alpha:0.8
+isVisible:false
+image:SHARED:icon_attack_point.png
+[hiddenAction_inp]
+autoTriggerOnEvent:newMessage
+setCustomTarget1:customTarget2.readUnitMemory('tar',type='unit')
+sendMessageTo:self
+sendMessageWithTags:connectRequest
+sendMessageWithData:node=select(customTarget1.tags(includes='node'),customTarget1,null),ser=select(customTarget1.tags(includes='ser'),customTarget1,null)
+#卧槽我当时怎么想到的 我真TM是个甜菜😋
+
+#[decal_tar]
+#layer: BEFOREUI
+#onlyWhenSelectedByAnyPlayer:true
+#image:ROOT:texture/other/ne.png
+#imageScale:10
+#xOffsetAbsolute:.x-self.x
+#yOffsetAbsolute:.y-self.y
+[attachment_eport]
+x:0
+y:3
+isUnselectable:true
+canBeAttackedAndDamaged:false
+addTransportedUnits:false
+setDrawLayerOnBottom:false
+canAttack:false
+lockRotation:true
+idleDir:0
+onCreateSpawnUnitOf:ePort
+[decal_l0]
+@define idx=0
+layer: BEFOREUI
+lineWidth:2
+#yOffsetRelative:
+#alpha:
+color: ${lineColor}
+drawLineTo:select(${idx}>memory.queueNodes.size,memory.connectServices[(${idx})].attachment,memory.queueNodes[(${idx}-memory.queueNodes.size)].attachment)
+[decal_ls]
+@copyFromSection:decal_l0
+drawLineTo:memory.source.attachment
+[decal_l1]
+@copyFromSection:decal_l0
+@define idx = 1
+[decal_l2]
+@copyFromSection:decal_l0
+@define idx = 2
+[decal_l3]
+@copyFromSection:decal_l0
+@define idx = 3
+[decal_l4]
+@copyFromSection:decal_l0
+@define idx = 4
+[decal_l5]
+@copyFromSection:decal_l0
+@define idx = 5
+[decal_l6]
+@copyFromSection:decal_l0
+@define idx = 6
+[decal_l7]
+@copyFromSection:decal_l0
+@define idx = 7
+[decal_l8]
+@copyFromSection:decal_l0
+@define idx = 8
+[decal_l9]
+@copyFromSection:decal_l0
+@define idx = 9
+[decal_l10]
+@copyFromSection:decal_l0
+@define idx = 10
+[decal_l11]
+@copyFromSection:decal_l0
+@define idx = 11
+[decal_l12]
+@copyFromSection:decal_l0
+@define idx = 12

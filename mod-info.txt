@@ -1,11 +1,11 @@
 [mod]
-title:锈蚀工业-preAlpha build1
-title_en:<Rustry>-preAlpha b1
-description:临时从Vecosmos分裂出的工业分支\n-by 鸽咕Edgedge
+title:锈蚀工业-preAlpha build2
+title_en:<Rustry>-preAlpha b2
+description:临时从Vecosmos分裂出的工业分支\n-注:受性能制约 模组中部分配方和现实有出入 如不锈钢 具体工艺请参考现实\n-by 鸽咕Edgedge
 #thumbnail:icon.png
 minVersion:1.15p11
 [music]
-sourceFolder:music/
+sourceFolder:sound/music/
 whenUsingUnitsFromThisMod_playExclusively:true
 [maps]
 sourceFolder:maps/

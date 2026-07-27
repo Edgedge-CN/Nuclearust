@@ -1,0 +1,170 @@
+[resource_wood]
+displayName:木头
+
+displayColor: #ffffff
+[resource_woodPlate]
+displayName:木板
+[resource_copper]
+displayName:铜锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_copperRope]
+displayName:铜线
+displayColor: #ffffff
+#id:11,type:3
+[resource_copperStick]
+displayName:铜棍
+displayColor: #ffffff
+#id:10,type:4
+[resource_copperBeam]
+displayName:铜棒
+displayColor: #ffffff
+#id:10,type:5
+[resource_copperBlock]
+displayName:铜块
+displayColor: #ffffff
+#id:10,type:5
+[resource_copperPlate]
+displayName:铜板
+displayColor: #ffffff
+#id:10,type:6
+[resource_iron]
+displayName:铁锭
+displayColor: #ffffff
+#id:11,type:1
+[resource_ironRope]
+displayName:铁线
+displayColor: #ffffff
+#id:11,type:3
+[resource_ironStick]
+displayName:铁棍
+displayColor: #ffffff
+#id:11,type:4
+[resource_ironBeam]
+displayName:铁棒
+displayColor: #ffffff
+#id:11,type:5
+[resource_ironBlock]
+displayName:铁块
+displayColor: #ffffff
+#id:11,type:5
+[resource_ironPlate]
+displayName:铁板
+displayColor: #ffffff
+#id:11,type:6
+[resource_aluminum]
+displayName:铝锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_aluminumRope]
+displayName:铝线
+displayColor: #ffffff
+#id:11,type:3
+[resource_aluminumStick]
+displayName:铝棍
+displayColor: #ffffff
+#id:10,type:4
+[resource_aluminumBeam]
+displayName:铝棒
+displayColor: #ffffff
+#id:10,type:5
+[resource_aluminumBlock]
+displayName:铝块
+displayColor: #ffffff
+#id:10,type:5
+[resource_aluminumPlate]
+displayName:铝板
+displayColor: #ffffff
+#id:10,type:1
+[resource_titanium]
+displayName:钛锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_titaniumRope]
+displayName:钛线
+displayColor: #ffffff
+#id:11,type:3
+[resource_titaniumStick]
+displayName:钛棍
+displayColor: #ffffff
+#id:10,type:4
+[resource_titaniumBeam]
+displayName:钛棒
+displayColor: #ffffff
+#id:10,type:5
+[resource_titaniumBlock]
+displayName:钛块
+displayColor: #ffffff
+#id:10,type:5
+[resource_titaniumPlate]
+displayName:钛板
+displayColor: #ffffff
+#id:10,type:1
+[resource_tin]
+displayName:锡锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_tinBlock]
+displayName:锡块
+displayColor: #ffffff
+#id:10,type:5
+[resource_tinPlate]
+displayName:锡板
+displayColor: #ffffff
+#id:10,type:1
+[resource_nickel]
+displayName:镍锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_nickelStick]
+displayName:镍棍
+displayColor: #ffffff
+#id:10,type:4
+[resource_nickelBlock]
+displayName:镍块
+displayColor: #ffffff
+#id:10,type:5
+[resource_nickelPlate]
+displayName:镍板
+displayColor: #ffffff
+#id:10,type:1
+[resource_tungsten]
+displayName:钨锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_tungstenRope]
+displayName:钨线
+displayColor: #ffffff
+#id:11,type:3
+[resource_tungstenStick]
+displayName:钨棍
+displayColor: #ffffff
+#id:10,type:4
+[resource_tungstenBlock]
+displayName:钨块
+displayColor: #ffffff
+#id:10,type:5
+[resource_tungstenPlate]
+displayName:钨板
+displayColor: #ffffff
+#id:10,type:6
+[resource_gold]
+displayName:金锭
+displayColor: #ffffff
+#id:10,type:1
+[resource_goldRope]
+displayName:金线
+displayColor: #ffffff
+#id:11,type:3
+[resource_goldBlock]
+displayName:铜块
+displayColor: #ffffff
+#id:10,type:5
+[resource_goldPlate]
+displayName:金板
+displayColor: #ffffff
+#id:10,type:6
+[resource_uranium]
+displayName:铀锭
+[resource_putn]
+displayName:钚锭
