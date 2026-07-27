@@ -1,0 +1,4 @@
+[core]
+strictLevel:0
+allowCaptureWhenNeutralByAI:true
+#傻逼ai连占领都不会

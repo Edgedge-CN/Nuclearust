@@ -1,0 +1,12 @@
+[mod]
+title:锈蚀工业-preAlpha build1
+title_en:<Rustry>-preAlpha b1
+description:临时从Vecosmos分裂出的工业分支\n-by 鸽咕Edgedge
+#thumbnail:icon.png
+minVersion:1.15p11
+[music]
+sourceFolder:music/
+whenUsingUnitsFromThisMod_playExclusively:true
+[maps]
+sourceFolder:maps/
+addExtraMapsForPath:true
